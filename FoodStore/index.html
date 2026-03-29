@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Store - Catálogo</title>
+
+  <style>
+    /* ─── Variables ─────────────────────────────────────── */
+    :root {
+      --background: #0f0e0c;
+      --surface:    #1a1916;
+      --border:     #2e2c28;
+      --accent:     #e8a234;
+      --accent2:    #d45f2e;
+      --text:       #f0ece4;
+      --muted:      #7a7568;
+      --radius:     14px;
+      --transition: .25s cubic-bezier(.4,0,.2,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* html { scroll-behavior: smooth; } */
+
+    body {
+      font-family: sans-serif;
+      background: var(--background);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: 240px 1fr;
+      grid-template-areas:
+        "header header"
+        "aside  main"
+        "footer footer";
+    }
+
+    /* ─── Header ────────────────────────────────────────── */
+    header {
+      grid-area: header;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 68px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header h1 {
+      font-family: sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    nav {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+    }
+
+    nav a {
+      font-family: sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      transition: color var(--transition), background var(--transition);
+    }
+
+    nav a:hover {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    nav a.active {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    nav a.admin {
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      margin-left: 0.5rem;
+    }
+
+    nav a.admin:hover {
+      background: var(--accent);
+      color: var(--background);
+    }
+
+    /* ─── Aside / Sidebar ───────────────────────────────── */
+    aside {
+      grid-area: aside;
+      padding: 2rem 1.25rem;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    aside h2 {
+      font-family:  sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    aside ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    aside ul li a {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.6rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    aside ul li a:hover,
+    aside ul li a.active {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    aside ul li a .cat-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ─── Main ──────────────────────────────────────────── */
+    main {
+      grid-area: main;
+      padding: 2rem 2.5rem;
+      overflow-y: auto;
+    }
+
+    /* Section title */
+    .section-title {
+      font-family:  sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    /* Product grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.25rem;
+    }
+
+    article.product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      animation: fadeUp .4s ease both;
+    }
+
+    article.product-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 20px rgba(232,162,52,.12);
+    }
+
+    .product-img-wrap {
+      position: relative;
+      height: 175px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .product-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+    }
+
+    article.product-card:hover .product-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .product-info {
+      padding: 1rem 1.1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .product-info h3 {
+      font-family:  sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .product-info p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.75rem;
+    }
+
+    .product-footer strong {
+      font-family:  sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .btn-add {
+      background: var(--accent);
+      color: var(--background);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-family:  sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .btn-add:hover {
+      background: var(--accent2);
+      transform: scale(1.04);
+    }
+
+    .btn-add:active {
+      transform: scale(0.97);
+    }
+
+    footer {
+      grid-area: footer;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    footer .footer-brand {
+      font-family:  sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    footer .footer-brand span { color: var(--accent); }
+
+    footer .footer-contact {
+      font-size: 0.83rem;
+      color: var(--muted);
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    footer .footer-contact a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    footer .footer-contact a:hover { color: var(--accent); }
+
+    footer .footer-copy {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ─── Responsive ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      body {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "header"
+          "aside"
+          "main"
+          "footer";
+      }
+
+      aside {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.25rem;
+      }
+
+      aside ul { flex-direction: row; flex-wrap: wrap; }
+
+      main { padding: 1.5rem 1.25rem; }
+
+      header { padding: 0 1.25rem; }
+
+      header h1 { font-size: 1.2rem; }
+
+      nav a { font-size: 0.78rem; padding: 0.4rem 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Food<span>Store</span></h1>
+    <nav>
+      <a href="index.html" class="active">Inicio</a>
+      <a href="#">Mis Pedidos</a>
+      <a href="#">Carrito</a>
+      <a href="admin.html" class="admin">Panel Admin</a>
+    </nav>
+  </header>
+
+  <aside>
+    <h2>Categorías</h2>
+    <ul>
+      <li><a href="#" class="active"><span class="cat-icon">🍽️</span> Todo</a></li>
+      <li><a href="#"><span class="cat-icon">🍕</span> Pizzas</a></li>
+      <li><a href="#"><span class="cat-icon">🍔</span> Hamburguesas</a></li>
+      <li><a href="#"><span class="cat-icon">🍟</span> Papas Fritas</a></li>
+      <li><a href="#"><span class="cat-icon">🥗</span> Ensaladas</a></li>
+      <li><a href="#"><span class="cat-icon">🍰</span> Postres</a></li>
+      <li><a href="#"><span class="cat-icon">🍺</span> Bebidas</a></li>
+    </ul>
+  </aside>
+
+  <main>
+
+    <p class="section-title">Todos los productos</p>
+
+    <section class="product-grid" aria-label="Catálogo de productos">
+
+      <article class="product-card">
+        <div class="product-img-wrap">
+          <img src="/assets/burguer.jpg" alt="Hamburguesa Clásica" />
+        </div>
+        <div class="product-info">
+          <h3>Hamburguesa Clásica</h3>
+          <p>Carne angus, lechuga, tomate, pickles y nuestra salsa secreta en pan brioche tostado. Incluye papas regulares.</p>
+          <div class="product-footer">
+            <strong>$10.000
+            </strong>
+            <button class="btn-add" >+ Agregar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img-wrap">
+          <img src="/assets/pizza.jpg" alt="Pizza Margherita" />
+        </div>
+        <div class="product-info">
+          <h3>Pizza Margherita</h3>
+          <p>Salsa de tomate artesanal, mozzarella fresca y hojas de albahaca. Masa fina y crocante.</p>
+          <div class="product-footer">
+            <strong>$12.500</strong>
+            <button class="btn-add" >+ Agregar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img-wrap">
+          <img src="/assets/corona.jpg" alt="Cerveza Corona" />
+        </div>
+        <div class="product-info">
+          <h3>Cerveza Corona</h3>
+          <p>Cerveza Corona 710 CC.</p>
+          <div class="product-footer">
+            <strong>$7.000</strong>
+            <button class="btn-add" onclick="alert('¡Agregado al carrito!')">+ Agregar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img-wrap">
+          <img src="/assets/papas.jpg" alt="Papas Regulares" />
+        </div>
+        <div class="product-info">
+          <h3>Papas Regulares</h3>
+          <p>Papas fritas tamaño regular.</p>
+          <div class="product-footer">
+            <strong>$3.000</strong>
+            <button class="btn-add">+ Agregar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img-wrap">
+          <img src="/assets/tacos.jpg" alt="Tacos de Pollo" />
+        </div>
+        <div class="product-info">
+          <h3>Tacos de Pollo x3</h3>
+          <p>Tortillas de maíz, pollo a la plancha, guacamole, salsa pico de gallo.</p>
+          <div class="product-footer">
+            <strong>$11.000</strong>
+            <button class="btn-add">+ Agregar</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img-wrap">
+          <img src="/assets/tiramisu.jpg" alt="Tiramisú" />
+        </div>
+        <div class="product-info">
+          <h3>Tiramisú</h3>
+          <p>Clásico postre italiano con savoiardi, mascarpone, espresso y cacao en polvo.</p>
+          <div class="product-footer">
+            <strong>$7.000</strong>
+            <button class="btn-add" >+ Agregar</button>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">Food<span>Store</span></div>
+    <div class="footer-contact">
+      <a href="mailto:contacto@foodstore.com">✉ contacto@foodstore.com</a>
+      <a href="tel:+543512345678">📞 (351) 234-5678</a>
+      <span>📍 Córdoba, Argentina</span>
+    </div>
+    <div class="footer-copy">© 2026 Pedro Hidalgo. Todos los derechos reservados.</div>
+  </footer>
+
+</body>
+</html>
