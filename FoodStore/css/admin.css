@@ -1,0 +1,326 @@
+/* ─── admin.css — estilos exclusivos del panel admin ───────────────────────
+   Depende de css/styles.css (variables y estilos base).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Variables adicionales del admin */
+:root {
+  --danger:  #e05252;
+  --success: #4caf7d;
+}
+
+/* ─── Badge "Admin" junto al logo ──────────────────────── */
+.admin-badge {
+  background: var(--accent);
+  color: var(--background);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 5px;
+  vertical-align: middle;
+  margin-left: 0.4rem;
+}
+
+/* ─── Main del admin (sin sidebar) ─────────────────────── */
+.admin-main {
+  grid-column: 1 / -1; /* ocupa todo el ancho, sin aside */
+  padding: 2.5rem;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* ─── Section header ────────────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+nav a.volver {
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  margin-left: 0.5rem;
+}
+
+nav a.volver:hover {
+  background: var(--accent);
+  color: var(--background);
+}
+
+/* ─── Tabla ─────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+thead {
+  background: var(--surface);
+}
+
+thead th {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.85rem 1.1rem;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+
+tbody tr:last-child { border-bottom: none; }
+
+tbody tr:hover { background: var(--surface); }
+
+tbody td {
+  padding: 0.85rem 1.1rem;
+  vertical-align: middle;
+  color: var(--text);
+}
+
+td.id-cell {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+td.img-cell img {
+  width: 52px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+td.name-cell { font-weight: 500; }
+
+.category-tag {
+  display: inline-block;
+  background: var(--border);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.2rem 0.6rem;
+  border-radius: 5px;
+}
+
+td.price-cell {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stock-ok       { color: var(--success); font-weight: 600; }
+.stock-low      { color: var(--accent);  font-weight: 600; }
+.stock-critical { color: var(--danger);  font-weight: 600; }
+
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-edit,
+.btn-del {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity var(--transition), transform var(--transition);
+  display: inline-block;
+}
+
+.btn-edit {
+  background: var(--border);
+  color: var(--text);
+}
+
+.btn-del {
+  background: rgba(224, 82, 82, .15);
+  color: var(--danger);
+  border: 1px solid rgba(224, 82, 82, .25);
+}
+
+.btn-edit:hover,
+.btn-del:hover { opacity: 0.8; transform: scale(1.04); }
+
+/* ─── Details / Formulario ──────────────────────────────── */
+details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background var(--transition);
+}
+
+summary::-webkit-details-marker { display: none; }
+summary:hover { background: var(--border); }
+
+summary .arrow {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--muted);
+  transition: transform var(--transition);
+}
+
+details[open] summary .arrow  { transform: rotate(180deg); }
+details[open] summary          { border-bottom: 1px solid var(--border); }
+
+.form-body {
+  padding: 1.75rem 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.form-group input,
+.form-group select {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.9rem;
+  padding: 0.6rem 0.85rem;
+  outline: none;
+  transition: border-color var(--transition);
+  appearance: none;
+}
+
+.form-group input::placeholder { color: var(--muted); }
+
+.form-group input:focus,
+.form-group select:focus { border-color: var(--accent); }
+
+.select-wrap { position: relative; }
+
+.select-wrap::after {
+  content: "▾";
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  font-size: 0.8rem;
+}
+
+.select-wrap select { width: 100%; }
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-submit {
+  background: var(--accent);
+  color: var(--background);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+ 
+.btn-submit:hover {
+  background: var(--accent2);
+  transform: scale(1.03);
+}
+ 
+.btn-cancel {
+
+  background: transparent;
+
+  color: var(--muted);
+
+  border: 1px solid var(--border);
+
+  padding: 0.7rem 1.2rem;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  font-size: 0.85rem;
+
+  cursor: pointer;
+
+  transition: color var(--transition), border-color var(--transition);
+
+}
+
+.btn-cancel {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.btn-cancel:hover { color: var(--text); border-color: var(--muted); }
+
+/* ─── Responsive ────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .admin-main { padding: 1.5rem 1.1rem; }
+  .form-body  { padding: 1.25rem 1rem; }
+}

@@ -4,433 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Food Store — Panel de Administración</title>
-  
-  <style>
-    :root {
-      --bg:        #0f0e0c;
-      --surface:   #1a1916;
-      --surface2:  #222019;
-      --border:    #2e2c28;
-      --accent:    #e8a234;
-      --accent2:   #d45f2e;
-      --danger:    #e05252;
-      --success:   #4caf7d;
-      --text:      #f0ece4;
-      --muted:     #7a7568;
-      --radius:    12px;
-      --transition: .22s cubic-bezier(.4,0,.2,1);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family:  sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-    }
-
-    /* ─── Header ────────────────────────────────────────── */
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      height: 68px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .admin-badge {
-      background: var(--accent);
-      color: var(--bg);
-      font-family: sans-serif;
-      font-size: 0.62rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.25rem 0.6rem;
-      border-radius: 5px;
-    }
-
-    header h1 {
-      font-family: sans-serif;
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--muted);
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      transition: color var(--transition), border-color var(--transition), background var(--transition);
-    }
-
-    .btn-back:hover {
-      color: var(--text);
-      border-color: var(--muted);
-      background: var(--border);
-    }
-
-    /* ─── Main wrapper ──────────────────────────────────── */
-    main {
-      padding: 2.5rem;
-      max-width: 1100px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-
-    /* ─── Section header ────────────────────────────────── */
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .section-header h2 {
-      font-family: sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    /* ─── Table ─────────────────────────────────────────── */
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.875rem;
-    }
-
-    thead {
-      background: var(--surface2);
-    }
-
-    thead th {
-      font-family: sans-serif;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0.85rem 1.1rem;
-      text-align: left;
-      white-space: nowrap;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background var(--transition);
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-
-    tbody tr:hover { background: var(--surface2); }
-
-    tbody td {
-      padding: 0.85rem 1.1rem;
-      vertical-align: middle;
-      color: var(--text);
-    }
-
-    td.id-cell {
-      font-family: sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    td.img-cell img {
-      width: 52px;
-      height: 40px;
-      object-fit: cover;
-      border-radius: 7px;
-      border: 1px solid var(--border);
-      display: block;
-    }
-
-    td.name-cell {
-      font-weight: 500;
-    }
-
-    .category-tag {
-      display: inline-block;
-      background: var(--border);
-      color: var(--muted);
-      font-size: 0.72rem;
-      font-weight: 500;
-      padding: 0.2rem 0.6rem;
-      border-radius: 5px;
-    }
-
-    td.price-cell {
-      font-family: sans-serif;
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    .stock-ok   { color: var(--success); font-weight: 600; }
-    .stock-low  { color: var(--accent);  font-weight: 600; }
-    .stock-critical { color: var(--danger);  font-weight: 600; }
-
-    .actions-cell {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .btn-edit, .btn-del {
-      font-family: sans-serif;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity var(--transition), transform var(--transition);
-      display: inline-block;
-    }
-
-    .btn-edit {
-      background: var(--border);
-      color: var(--text);
-    }
-
-    .btn-del {
-      background: rgba(224,82,82,.15);
-      color: var(--danger);
-      border: 1px solid rgba(224,82,82,.25);
-    }
-
-    .btn-edit:hover, .btn-del:hover { opacity: 0.8; transform: scale(1.04); }
-
-    /* ─── Details / Form ────────────────────────────────── */
-    details {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    summary {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 1.1rem 1.5rem;
-      font-family: sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      user-select: none;
-      list-style: none;
-      transition: background var(--transition);
-    }
-
-    summary::-webkit-details-marker { display: none; }
-
-    summary:hover { background: var(--surface2); }
-
-    summary .arrow {
-      margin-left: auto;
-      font-size: 0.75rem;
-      color: var(--muted);
-      transition: transform var(--transition);
-    }
-
-    details[open] summary .arrow { transform: rotate(180deg); }
-
-    details[open] summary {
-      border-bottom: 1px solid var(--border);
-    }
-
-    .form-body {
-      padding: 1.75rem 1.5rem;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-    }
-
-    .form-group label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      font-family: sans-serif;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .form-group input,
-    .form-group select {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      padding: 0.65rem 0.9rem;
-      border-radius: 8px;
-      outline: none;
-      transition: border-color var(--transition);
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
-    .form-group input::placeholder { color: var(--muted); }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--accent);
-    }
-
-    .select-wrap {
-      position: relative;
-    }
-
-    .select-wrap::after {
-      content: "▾";
-      position: absolute;
-      right: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-      font-size: 0.8rem;
-    }
-
-    .select-wrap select { width: 100%; }
-
-    .form-actions {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-submit {
-      background: var(--accent);
-      color: var(--bg);
-      border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 8px;
-      font-family: sans-serif;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: background var(--transition), transform var(--transition);
-    }
-
-    .btn-submit:hover {
-      background: var(--accent2);
-      transform: scale(1.03);
-    }
-
-    .btn-cancel {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 0.7rem 1.2rem;
-      border-radius: 8px;
-      font-family: sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: color var(--transition), border-color var(--transition);
-    }
-
-    .btn-cancel:hover { color: var(--text); border-color: var(--muted); }
-
-    /* ─── Footer ────────────────────────────────────────── */
-    footer {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      padding: 1.25rem 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    footer .footer-brand {
-      font-family: sans-serif;
-      font-weight: 800;
-      font-size: 0.95rem;
-      color: var(--text);
-    }
-
-    footer .footer-brand span { color: var(--accent); }
-
-    footer .footer-copy {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    /* ─── Responsive ────────────────────────────────────── */
-    @media (max-width: 640px) {
-      header { padding: 0 1.25rem; }
-      header h1 { font-size: 1rem; }
-      main { padding: 1.5rem 1.1rem; }
-      .form-body { padding: 1.25rem 1rem; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link rel="icon" href="assets/favicon.ico" />
 </head>
 <body>
 
   <header>
-    <div class="header-left">
-      <span class="admin-badge">Admin</span>
-      <h1>Panel de Administración</h1>
-    </div>
-    <a href="index.html" class="btn-back">← Volver a la Tienda</a>
+    <h1>Food<span>Store</span> <small class="admin-badge">Admin</small></h1>
+    <nav>
+      <a href="index.html" class="volver">Volver a la Tienda</a>
+    </nav>
   </header>
 
-  <main>
+  <main class="admin-main">
 
     <section>
       <div class="section-header">
-        <h2>Inventario de Productos</h2>
+        <p class="section-title">Inventario de Productos</p>
       </div>
 
       <div class="table-wrap">
@@ -450,7 +41,7 @@
             <tr>
               <td class="id-cell">#001</td>
               <td class="img-cell">
-                <img src="/Assets/burguer.jpg" alt="Hamburguesa Clásica" />
+                <img src="assets/burguer.jpg" alt="Hamburguesa Clásica" />
               </td>
               <td class="name-cell">Hamburguesa Clásica</td>
               <td><span class="category-tag">🍔 Hamburguesas</span></td>
@@ -466,7 +57,7 @@
             <tr>
               <td class="id-cell">#002</td>
               <td class="img-cell">
-                <img src="/Assets/pizza.jpg" alt="Pizza Margherita" />
+                <img src="assets/pizza.jpg" alt="Pizza Margherita" />
               </td>
               <td class="name-cell">Pizza Margherita</td>
               <td><span class="category-tag">🍕 Pizzas</span></td>
@@ -482,7 +73,7 @@
             <tr>
               <td class="id-cell">#003</td>
               <td class="img-cell">
-                <img src="/Assets/corona.jpg" alt="Cerveza Corona" />
+                <img src="assets/corona.jpg" alt="Cerveza Corona" />
               </td>
               <td class="name-cell">Cerveza Corona</td>
               <td><span class="category-tag">🍺 Bebidas</span></td>
@@ -498,7 +89,7 @@
             <tr>
               <td class="id-cell">#004</td>
               <td class="img-cell">
-                <img src="/Assets/papas.jpg" alt="Papas Regulares" />
+                <img src="assets/papas.jpg" alt="Papas Regulares" />
               </td>
               <td class="name-cell">Papas Regulares</td>
               <td><span class="category-tag">🍟 Papas Fritas</span></td>
@@ -514,11 +105,11 @@
             <tr>
               <td class="id-cell">#005</td>
               <td class="img-cell">
-                <img src="/Assets/tacos.jpg" alt="Tacos de Pollo" />
+                <img src="assets/tacos.jpg" alt="Tacos de Pollo" />
               </td>
               <td class="name-cell">Tacos de Pollo x3</td>
               <td><span class="category-tag">🌮 Tacos</span></td>
-              <td class="price-cell">11.000</td>
+              <td class="price-cell">$11.000</td>
               <td><span class="stock-critical">2 unidades</span></td>
               <td>
                 <div class="actions-cell">
@@ -530,7 +121,7 @@
             <tr>
               <td class="id-cell">#006</td>
               <td class="img-cell">
-                <img src="/Assets/tiramisu.jpg" alt="Tiramisú" />
+                <img src="assets/tiramisu.jpg" alt="Tiramisú" />
               </td>
               <td class="name-cell">Tiramisú</td>
               <td><span class="category-tag">🍰 Postres</span></td>
@@ -550,7 +141,7 @@
 
     <details>
       <summary>
-        ＋ Agregar Producto Rápido
+        ＋ Agregar Producto
       </summary>
       <div class="form-body">
         <form action="#" method="POST">
